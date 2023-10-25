@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "elementree"
+version = "0.1.0"
+description = "A Library providing various tree data structures."
+license = "GPL-3.0-or-later"
+authors = ["Michael Nutt <michaeltnutt@gmail.com>"]
+maintainers = [
+    "Michael Nutt <michaeltnutt@gmail.com>"
+]
+readme = "README.md"
+repository = "https://github.com/michaelnutt2/elementree/tree/trunk"
+keywords = ["tree", "data structure"]
+packages = [
+    { include = "elementree", from = "src"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+robotframework = "^6.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
