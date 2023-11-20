@@ -15,13 +15,22 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
-from enum import Enum
+import cfg
 
 
-class xyz(Enum):
-    X_MAX = 0
-    X_MIN = 1
-    Y_MAX = 2
-    Y_MIN = 3
-    Z_MAX = 4
-    Z_MIN = 5
+class Region:
+    def __init__(self, bounds: (int, int, int, int, int, int)):
+        self.x_max = bounds[cfg.X_MAX]
+        self.x_min = bounds[cfg.X_MIN]
+        self.y_max = bounds[cfg.Y_MAX]
+        self.y_min = bounds[cfg.Y_MIN]
+        self.z_max = bounds[cfg.Z_MAX]
+        self.z_min = bounds[cfg.Z_MIN]
+
+    def within_bounds(self, point: (int, int, int)) -> bool:
+        x, y, z = point[cfg.x], point[cfg.y], point[cfg.z]
+        if (self.x_max > x >= self.x_min and
+                self.y_max > y >= self.y_min and
+                self.z_max > z >= self.z_min):
+            return True
+        return False

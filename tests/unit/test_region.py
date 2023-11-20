@@ -15,23 +15,14 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
-import numpy as np
+
+import unittest
 
 
-class OctreeNode:
-    def __init__(
-            self,
-            parent_occupancy: np.uint8 = 0,
-            parent: 'OctreeNode' = None
-    ):
-        self._parent_occupancy = parent_occupancy
-        self._parent = parent
-        ...
+class MyTestCase(unittest.TestCase):
+    def test_something(self):
+        self.assertEqual(True, False)  # add assertion here
 
-    @property
-    def parent_occupancy(self):
-        return self._parent_occupancy
 
-    @property
-    def parent(self):
-        return self._parent
+if __name__ == '__main__':
+    unittest.main()

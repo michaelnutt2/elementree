@@ -4,3 +4,7 @@
 src/elementree/__pycache__/
 
 tests/unit/__pycache__/
+
+src/elementree/lidar/octree/__pycache__/
+
+src/elementree/lidar/__pycache__/
