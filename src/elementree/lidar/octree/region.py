@@ -20,17 +20,15 @@ import cfg
 
 class Region:
     def __init__(self, bounds: (int, int, int, int, int, int)):
-        self.x_max = bounds[cfg.X_MAX]
-        self.x_min = bounds[cfg.X_MIN]
-        self.y_max = bounds[cfg.Y_MAX]
-        self.y_min = bounds[cfg.Y_MIN]
-        self.z_max = bounds[cfg.Z_MAX]
-        self.z_min = bounds[cfg.Z_MIN]
+        self._bounds = bounds
 
     def within_bounds(self, point: (int, int, int)) -> bool:
-        x, y, z = point[cfg.x], point[cfg.y], point[cfg.z]
-        if (self.x_max > x >= self.x_min and
-                self.y_max > y >= self.y_min and
-                self.z_max > z >= self.z_min):
+        x, y, z = point[cfg.X], point[cfg.Y], point[cfg.Z]
+        if (self._bounds[cfg.X_MAX] > x >= self._bounds[cfg.X_MIN] and
+                self._bounds[cfg.Y_MAX] > y >= self._bounds[cfg.Y_MIN] and
+                self._bounds[cfg.Z_MAX] > z >= self._bounds[cfg.Z_MIN]):
             return True
         return False
+
+    def __getitem__(self, item):
+        return self._bounds[item]

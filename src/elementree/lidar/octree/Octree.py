@@ -15,20 +15,20 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
+from typing import Union
 
 import numpy as np
 
 from elementree import utils
-from cfg import *
-from elementree.lidar.octree.OctreeNode import OctreeNode
+import cfg
 
-
-
+from elementree.lidar.octree.region import Region
 
 
 class Octree:
     """Creates octree data structure from input point cloud"""
-    def __init__(self, point_cloud: np.ndarray, bounds: (int, int, int, int, int, int)):
+
+    def __init__(self, point_cloud: np.ndarray, bounds: Region):
         self._points = point_cloud
         self._bounds = bounds
         self._k = 0
@@ -40,7 +40,9 @@ class Octree:
         self._location = None
         self._parent_occupancy = 0
         self._parent = None
-        self._children = None
+        self._children: list[Union['Octree', None]] = [
+            None, None, None, None, None, None, None, None
+        ]
         self._octant = None
         self._level = None
 
@@ -50,12 +52,49 @@ class Octree:
             self._min = np.float32(0)
             self._scale_to_range()
 
-
     def build_tree(self):
-        octants: list(int) = [
-
+        a = (
+            self._bounds[cfg.X_MIN],
+            self._bounds[cfg.Y_MIN],
+            self._bounds[cfg.Z_MIN]
+        )
+        c = (
+            self._bounds[cfg.X_MAX],
+            self._bounds[cfg.Y_MAX],
+            self._bounds[cfg.Z_MAX]
+        )
+        b = (
+            utils.find_center_point(a[cfg.X], c[cfg.X]),
+            utils.find_center_point(a[cfg.Y], c[cfg.Y]),
+            utils.find_center_point(a[cfg.Z], c[cfg.Z])
+        )
+        octant_regions: list['Region'] = [
+            Region((c[cfg.X], c[cfg.Y], c[cfg.Z], b[cfg.X], b[cfg.Y], b[cfg.Z])),
+            Region((b[cfg.X], c[cfg.Y], c[cfg.Z], a[cfg.X], b[cfg.Y], b[cfg.Z])),
+            Region((b[cfg.X], b[cfg.Y], c[cfg.Z], a[cfg.X], a[cfg.Y], b[cfg.Z])),
+            Region((c[cfg.X], b[cfg.Y], c[cfg.Z], b[cfg.X], a[cfg.Y], b[cfg.Z])),
+            Region((c[cfg.X], b[cfg.Y], b[cfg.Z], b[cfg.X], a[cfg.Y], a[cfg.Z])),
+            Region((b[cfg.X], b[cfg.Y], b[cfg.Z], a[cfg.X], a[cfg.Y], a[cfg.Z])),
+            Region((b[cfg.X], c[cfg.Y], b[cfg.Z], a[cfg.X], b[cfg.Y], a[cfg.Z])),
+            Region((c[cfg.X], c[cfg.Y], b[cfg.Z], b[cfg.X], b[cfg.Y], a[cfg.Z]))
         ]
-        ...
+
+        octants: list[(int, int, int)] = [
+            [None], [None], [None], [None], [None], [None], [None], [None]
+        ]
+
+        for point in self._points:
+            for i in range(8):
+                if octant_regions[i].within_bounds(point):
+                    octants[i].append(point)
+
+        for i, octant in enumerate(octants):
+            child = None
+            # TODO: Fix this so that leaf nodes are correctly entered instead of
+            #   recursing forever
+            if octant:
+                child = Octree(octant, octant_regions[i])
+            self._children[i] = child
 
     def _scale_to_range(self):
         x, y, z, r = np.hsplit(self._points, 4)
@@ -69,26 +108,6 @@ class Octree:
     @property
     def scaling_factor(self):
         return self._x_scale_factor, self._y_scale_factor, self._z_scale_factor
-
-    def _build_tree(self) -> None:
-
-        bounds = utils.find_bounds(self._points)
-        a = (bounds[X_MAX], bounds[Y_MAX], bounds[Z_MAX])
-        c = (bounds[X_MIN], bounds[Y_MIN], bounds[Z_MIN])
-        x_c, y_c, z_c = (
-            utils.find_center_point(bounds[X_MAX], bounds[X_MIN]),
-            utils.find_center_point(bounds[Y_MAX], bounds[Y_MIN]),
-            utils.find_center_point(bounds[Z_MAX], bounds[Z_MIN])
-        )
-        b = (x_c, y_c, z_c)
-
-        for point in self._points:
-            if point[X] >= a[X]:
-                if point[Y] >= a[Y]:
-                    if point[Z] >= a[Z]:
-                        node = OctreeNode(5, b, 1)
-                    else:
-                        node = OctreeNode(2, b, 1)
 
     def _create_node(self):
         ...
