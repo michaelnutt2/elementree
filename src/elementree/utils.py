@@ -52,7 +52,7 @@ def scale_to_range(
     )
     for i in range(len(array)):
         array[i] = int(scale_factor * (array[i] - from_min))
-    return array
+    return array, scale_factor
 
 
 def scaling_factor(
@@ -70,3 +70,18 @@ def scaling_factor(
     :return:
     """
     return round((to_max - to_min) / ((from_max - from_min) + to_min), 4)
+
+
+def find_center_point(x1: int, x2: int) -> int:
+    return int((x1 + x2) / 2)
+
+
+def downscale(coord: int, i: int) -> int:
+    """
+    Removes the first i bits from the number
+    :param coord: value to be reduced
+    :param i: number of bits to remove
+    :return: downscaled value
+    """
+    coord = coord >> i
+    return coord << i
