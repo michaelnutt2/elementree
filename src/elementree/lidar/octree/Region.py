@@ -15,14 +15,42 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
-import cfg
+from typing import Union
+
+from elementree.lidar.octree import cfg
 
 
 class Region:
-    def __init__(self, bounds: (int, int, int, int, int, int)):
-        self._bounds = bounds
+    """
+    Defines an area.
+    """
 
-    def within_bounds(self, point: (int, int, int)) -> bool:
+    def __init__(
+            self,
+            x_max: int,
+            y_max: int,
+            z_max: int,
+            x_min: int,
+            y_min: int,
+            z_min: int,
+    ):
+        if x_max < x_min:
+            raise ValueError
+        if y_max < y_min:
+            raise ValueError
+        if z_max < z_min:
+            raise ValueError
+
+        self._bounds = {
+            'x_max': x_max,
+            'x_min': x_min,
+            'y_max': y_max,
+            'y_min': y_min,
+            'z_max': z_max,
+            'z_min': z_min
+        }
+
+    def within_bounds(self, point: (int, int, int, int)) -> bool:
         x, y, z = point[cfg.X], point[cfg.Y], point[cfg.Z]
         if (self._bounds[cfg.X_MAX] > x >= self._bounds[cfg.X_MIN] and
                 self._bounds[cfg.Y_MAX] > y >= self._bounds[cfg.Y_MIN] and

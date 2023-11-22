@@ -16,12 +16,12 @@
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
 
-X_MAX: int = 0
-X_MIN: int = 1
-Y_MAX: int = 2
-Y_MIN: int = 3
-Z_MAX: int = 4
-Z_MIN: int = 5
+X_MAX: str = 'x_max'
+X_MIN: str = 'x_min'
+Y_MAX: str = 'y_max'
+Y_MIN: str = 'y_min'
+Z_MAX: str = 'z_max'
+Z_MIN: str = 'z_min'
 X: int = 0
 Y: int = 1
 Z: int = 2

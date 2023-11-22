@@ -19,9 +19,18 @@
 import unittest
 
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+class RegionTest(unittest.TestCase):
+    def setUp(self):
+        from elementree.lidar.octree.Region import Region
+        self.region = Region(x_max=5, x_min=-5, y_max=5, y_min=-5, z_max=5, z_min=-5)
+
+    def test_region_is_within_bounds(self):
+        within_bounds = self.region.within_bounds(point=(4, 2, 1))
+        self.assertTrue(within_bounds)
+
+    def test_region_is_not_within_bounds(self):
+        within_bounds = self.region.within_bounds(point=(14, 2, 1))
+        self.assertFalse(within_bounds)
 
 
 if __name__ == '__main__':

@@ -69,7 +69,7 @@ class UtilsTestCase(unittest.TestCase):
     def test_scale_x_to_range_k_equals_16(self):
         from elementree.utils import scale_to_range
         x = self.array[0]
-        scaled_16 = scale_to_range(np.float32(65535), np.float32(0.0), x)
+        scaled_16, _ = scale_to_range(np.float32(65535), np.float32(0.0), x)
         self.assertEqual(0, scaled_16[0])
         self.assertEqual(45874, scaled_16[1])
         self.assertEqual(52428, scaled_16[2])
@@ -77,7 +77,7 @@ class UtilsTestCase(unittest.TestCase):
     def test_scale_x_to_range_k_equals_8(self):
         from elementree.utils import scale_to_range
         x = self.array[0]
-        scaled_8 = scale_to_range(np.float32(255), np.float32(0.0), x)
+        scaled_8, _ = scale_to_range(np.float32(255), np.float32(0.0), x)
         self.assertEqual(0, scaled_8[0])
         self.assertEqual(178, scaled_8[1])
         self.assertEqual(204, scaled_8[2])

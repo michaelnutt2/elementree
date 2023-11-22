@@ -33,7 +33,9 @@ def find_bounds(point_cloud: np.ndarray) -> (float, float, float, float, float, 
 def scale_to_range(
         to_max: np.float32,
         to_min: np.float32,
-        array: np.ndarray) -> np.ndarray:
+        array: np.ndarray) -> (
+        np.ndarray, np.float32
+):
     """
     TODO
     :param to_max:
