@@ -19,7 +19,7 @@
 import unittest
 
 
-class RegionTest(unittest.TestCase):
+class TestRegion(unittest.TestCase):
     def setUp(self):
         from elementree.lidar.octree.Region import Region
         self.region = Region(x_max=5, x_min=-5, y_max=5, y_min=-5, z_max=5, z_min=-5)
@@ -34,4 +34,4 @@ class RegionTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=3)

@@ -19,7 +19,7 @@ import unittest
 import numpy as np
 
 
-class UtilsTestCase(unittest.TestCase):
+class TestUtils(unittest.TestCase):
 
     def setUp(self) -> None:
         self.array = np.array([
@@ -86,3 +86,7 @@ class UtilsTestCase(unittest.TestCase):
         from elementree.utils import find_center_point
         cp = find_center_point(0, 255)
         self.assertEqual(127, cp)
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=3)

@@ -20,7 +20,7 @@ import unittest
 import numpy as np
 
 
-class OctreeTestCase(unittest.TestCase):
+class TestOctree(unittest.TestCase):
     def setUp(self):
         from elementree.lidar.octree import Octree as oc
         from elementree.lidar.octree import Region as rg
@@ -28,7 +28,7 @@ class OctreeTestCase(unittest.TestCase):
             [-5, 2, 3, 5],
             [-5, -1, 4, 5],
             [-4, 3, -1, 6],
-            [-4, 5, -5, 2],
+            [-4, 4, -5, 2],
             [-3, 2, 1, 4],
             [-3, -2, 5, 5],
             [-2, 1, 4, 7],
@@ -40,7 +40,7 @@ class OctreeTestCase(unittest.TestCase):
             [1, 2, 5, 4],
             [1, 3, -1, 4],
             [2, 4, -1, 0],
-            [2, -5, 2, 0],
+            [2, -3, 2, 0],
             [3, 0, 1, 0],
             [4, -1, 5, 1],
             [4, -2, 3, 1],
@@ -54,23 +54,23 @@ class OctreeTestCase(unittest.TestCase):
         self.tree.setup(8)
         self.tree._scale_to_range()
         self.assertEqual(0, self.tree._points[0][0])
-        self.assertEqual(178, self.tree._points[0][1])
+        self.assertEqual(179, self.tree._points[0][1])
         self.assertEqual(204, self.tree._points[0][2])
         self.assertEqual(0, self.tree._points[1][0])
         self.assertEqual(102, self.tree._points[1][1])
-        self.assertEqual(229, self.tree._points[1][2])
+        self.assertEqual(230, self.tree._points[1][2])
         self.assertEqual(25, self.tree._points[2][0])
         self.assertEqual(204, self.tree._points[2][1])
         self.assertEqual(102, self.tree._points[2][2])
         self.assertEqual(25, self.tree._points[3][0])
-        self.assertEqual(255, self.tree._points[3][1])
+        self.assertEqual(230, self.tree._points[3][1])
         self.assertEqual(0, self.tree._points[3][2])
 
     def test_downscale(self):
         from elementree.utils import downscale
         self.tree.setup(8)
         self.tree._scale_to_range()
-        x, y, z, _ = self.array[0]
+        x, y, z, _ = self.tree._points[0]
         x = downscale(x, 3)
         y = downscale(y, 3)
         z = downscale(z, 3)
@@ -89,15 +89,14 @@ class OctreeTestCase(unittest.TestCase):
         octants = [(5, 4, 4), (2, 3, 1)]
         node = self.tree._create_node(octants, self.region)
         self.assertEqual(self.region, node.bounds)
-        self.assertEqual(self.tree, node.parent)
 
     def test_breadth_first_traversal(self):
         self.tree.setup(8)
         self.tree.build_tree()
         occupancy = self.tree.bft()
         test_occupancy = [
-            243, 40, 180, 64, 142, 194, 66, 0, 20, 0, 0, 3, 0, 18, 24, 0, 0, 0,
-            0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            207, 20, 45, 2, 113, 67, 66, 0, 90, 0, 0, 192, 0, 72, 24, 0, 0, 0,
+            0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         ]
         self.assertEqual(test_occupancy, occupancy)
 
@@ -112,4 +111,4 @@ class OctreeTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=3)

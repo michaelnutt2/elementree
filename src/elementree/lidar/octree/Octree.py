@@ -159,7 +159,8 @@ class Octree:
         if len(octant) == 0:
             return None
 
-        ret = Octree(point_cloud=octant, bounds=region, _level=self._level+1)
+        ret = Octree(point_cloud=octant, bounds=region, _level=self.level+1)
+        ret.build_tree()
         return ret
 
     def _scale_to_range(self):
